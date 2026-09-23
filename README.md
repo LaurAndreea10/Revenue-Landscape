@@ -2,6 +2,14 @@
 
 Dashboard 3D bilingv și accesibil pentru explorarea veniturilor, comparații YoY, forecast și simulări *What-if*.
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-2ee6c8?style=for-the-badge&logo=github&logoColor=080b17)](https://laurandreea10.github.io/Revenue-Landscape/)
+[![Case Study](https://img.shields.io/badge/Case_Study-8b6bff?style=for-the-badge&logo=readme&logoColor=white)](https://laurandreea10.github.io/Revenue-Landscape/case-study.html)
+[![PWA](https://img.shields.io/badge/PWA-ready-ff5c9a?style=for-the-badge)](https://laurandreea10.github.io/Revenue-Landscape/manifest.webmanifest)
+
+![Revenue Landscape preview](social-preview.svg)
+
+**[Deschide aplicația](https://laurandreea10.github.io/Revenue-Landscape/)** · **[Citește studiul de caz](https://laurandreea10.github.io/Revenue-Landscape/case-study.html)** · **[Vezi changelog-ul](CHANGELOG.md)**
+
 ## Problemă → Decizie → Rezultat
 
 - **Problemă:** un bar chart clasic arată valorile, dar nu susține explorarea, scenariile sau interpretarea rapidă.
@@ -55,6 +63,8 @@ Datele importate rămân în browser. Aplicația nu trimite seturile de date că
 ## Autor
 
 Laura Andreea Plugaru — front-end self-taught, CRM & Marketing.
+
+[Portofoliu](https://laurandreea10.github.io/codepen-portfolio/) · [GitHub](https://github.com/LaurAndreea10)
 
 ---
 
