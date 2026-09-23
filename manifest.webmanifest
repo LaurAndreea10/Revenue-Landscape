@@ -1,0 +1,15 @@
+{
+  "name": "Revenue Landscape — 3D Analytics Lab",
+  "short_name": "Revenue 3D",
+  "description": "Dashboard 3D accesibil pentru venituri, forecast și scenarii.",
+  "lang": "ro",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080b17",
+  "theme_color": "#080b17",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}],
+  "shortcuts": [{"name":"Deschide Analytics Lab","url":"./#chart","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}]
+}
