@@ -1,460 +1,86 @@
-<title>Revenue Landscape</title>
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b17">
+<meta name="description" content="Revenue Landscape — vizualizare 3D interactivă a veniturilor lunare, accesibilă și bilingvă.">
+<meta name="author" content="Laura Andreea Plugaru">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://laurandreea10.github.io/revenue-landscape/">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta property="og:type" content="website"><meta property="og:title" content="Revenue Landscape — 3D Analytics Lab"><meta property="og:description" content="Explorează venituri, comparații, forecast și scenarii într-un dashboard 3D accesibil."><meta property="og:url" content="https://laurandreea10.github.io/revenue-landscape/"><meta property="og:image" content="https://laurandreea10.github.io/revenue-landscape/social-preview.svg">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Revenue Landscape — 3D Analytics Lab"><meta name="twitter:description" content="Un dashboard 3D local-first pentru analiza veniturilor."><meta name="twitter:image" content="https://laurandreea10.github.io/revenue-landscape/social-preview.svg">
+<title>Revenue Landscape — 3D Sales Revenue</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Revenue Landscape","applicationCategory":"BusinessApplication","operatingSystem":"Any","description":"Accessible bilingual 3D revenue analytics dashboard with forecasting and scenario simulation.","author":{"@type":"Person","name":"Laura Andreea Plugaru"},"isAccessibleForFree":true,"inLanguage":["ro","en"]}</script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Sora:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap');
-
-  :root{
-    --bg:#080b17; --bg2:#0d1224;
-    --panel:rgba(18,25,48,0.72); --panel2:rgba(15,21,42,0.9);
-    --stroke:rgba(120,140,210,0.16); --stroke2:rgba(120,140,210,0.28);
-    --ink:#eaf0ff; --muted:#8b97c4; --faint:#5b6690;
-    --cyan:#2ee6c8; --violet:#8b6bff; --pink:#ff5c9a; --gold:#ffcf5c;
-    --input-bg:rgba(9,13,26,0.7);
-    --font-display:'Chakra Petch',system-ui,sans-serif;
-    --font-body:'Sora',system-ui,sans-serif;
-    --font-mono:'JetBrains Mono',ui-monospace,monospace;
-  }
-  body[data-mode="light"]{
-    --bg:#eef1fb; --bg2:#e2e7f6;
-    --panel:rgba(255,255,255,0.78); --panel2:rgba(255,255,255,0.92);
-    --stroke:rgba(60,80,150,0.18); --stroke2:rgba(60,80,150,0.32);
-    --ink:#1a2138; --muted:#5a6488; --faint:#8791b0;
-    --input-bg:rgba(255,255,255,0.8);
-  }
-
-  html,body{height:100%;}
-  body{
-    margin:0; font-family:var(--font-body); color:var(--ink);
-    background:
-      radial-gradient(1200px 700px at 72% -10%, rgba(139,107,255,0.16), transparent 60%),
-      radial-gradient(1000px 800px at 8% 110%, rgba(46,230,200,0.10), transparent 55%),
-      linear-gradient(180deg,var(--bg2),var(--bg));
-    background-attachment:fixed; -webkit-font-smoothing:antialiased;
-    transition:color .2s;
-  }
-  .wrap{min-height:100%;display:flex;flex-direction:column;padding:0 16px;padding-block:22px 26px;max-width:1060px;margin:0 auto;box-sizing:border-box;}
-
-  header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;}
-  .eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan);margin:0 0 6px;}
-  h1{font-family:var(--font-display);font-weight:700;font-size:clamp(25px,5vw,38px);margin:0;line-height:1.02;letter-spacing:.01em;text-wrap:balance;}
-  h1 .sub{display:block;color:var(--muted);font-weight:500;font-size:.42em;letter-spacing:.16em;text-transform:uppercase;margin-top:8px;}
-
-  .stats{display:flex;gap:10px;flex-wrap:wrap;}
-  .stat{background:var(--panel);border:1px solid var(--stroke);border-radius:12px;padding:10px 14px;min-width:100px;backdrop-filter:blur(6px);}
-  .stat .k{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);}
-  .stat .v{font-family:var(--font-display);font-weight:600;font-size:19px;margin-top:3px;font-variant-numeric:tabular-nums;}
-  .stat .v small{font-size:12px;color:var(--muted);font-weight:500;}
-  .stat.accent .v{color:var(--cyan);}
-
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
-  .tbtn{
-    font-family:var(--font-mono);font-size:11.5px;letter-spacing:.03em;color:var(--ink);
-    background:var(--panel);border:1px solid var(--stroke);padding:8px 12px;border-radius:9px;
-    cursor:pointer;backdrop-filter:blur(6px);display:inline-flex;align-items:center;gap:7px;
-    transition:border-color .15s,color .15s,background .15s;user-select:none;
-  }
-  .tbtn:hover{border-color:var(--stroke2);}
-  .tbtn.active{border-color:rgba(46,230,200,0.6);color:var(--cyan);background:rgba(46,230,200,0.08);}
-  .tbtn[disabled]{opacity:.4;pointer-events:none;}
-  .tbtn .dot{width:7px;height:7px;border-radius:50%;background:var(--faint);}
-  .tbtn.active .dot{background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
-
-  .stage{position:relative;margin-top:14px;border:1px solid var(--stroke);border-radius:18px;overflow:hidden;
-    background:radial-gradient(900px 460px at 50% 120%, rgba(46,230,200,0.06), transparent 60%),linear-gradient(180deg, var(--panel2), transparent);
-    box-shadow:0 30px 80px -40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);
-    aspect-ratio:16/10;max-width:100%;touch-action:none;}
-  @media (max-width:560px){ .stage{aspect-ratio:1/1;} }
-  canvas{display:block;width:100%;height:100%;cursor:grab;}
-  canvas:active{cursor:grabbing;}
-
-  .legend{position:absolute;left:16px;bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);pointer-events:none;font-family:var(--font-body);}
-  .legend .item{display:flex;align-items:center;gap:7px;}
-  .swatch{width:22px;height:10px;border-radius:3px;}
-  .swatch.bar{background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));}
-  .swatch.ghost{background:rgba(120,150,230,0.35);border:1px solid rgba(120,150,230,0.5);}
-  .swatch.line{height:0;border-top:2px solid var(--gold);width:22px;box-shadow:0 0 8px var(--gold);}
-
-  .tip{position:absolute;pointer-events:none;opacity:0;transform:translate(-50%,-120%);background:var(--panel2);
-    border:1px solid rgba(46,230,200,0.4);border-radius:10px;padding:8px 11px;transition:opacity .12s;
-    font-family:var(--font-mono);white-space:nowrap;z-index:5;box-shadow:0 12px 30px -12px rgba(0,0,0,.6);}
-  .tip .m{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);}
-  .tip .r{font-size:16px;font-weight:600;margin-top:2px;font-variant-numeric:tabular-nums;color:var(--ink);}
-  .tip .d{font-size:10px;color:var(--muted);margin-top:2px;}
-
-  .editor{margin-top:14px;border:1px solid var(--stroke);border-radius:14px;background:var(--panel);backdrop-filter:blur(6px);overflow:hidden;}
-  .editor[hidden]{display:none;}
-  .editor .ehead{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--stroke);}
-  .editor .ehead h2{font-family:var(--font-display);font-size:14px;margin:0;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);}
-  .egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:14px 16px;}
-  .erow{display:grid;grid-template-columns:34px 1fr 1fr;gap:6px;align-items:center;}
-  .erow .lbl{font-family:var(--font-mono);font-size:11px;color:var(--faint);text-transform:uppercase;}
-  .egrid input, .trow input{width:100%;box-sizing:border-box;font-family:var(--font-mono);font-size:12px;
-    background:var(--input-bg);border:1px solid var(--stroke);border-radius:7px;color:var(--ink);
-    padding:6px 8px;font-variant-numeric:tabular-nums;}
-  .egrid input:focus, .trow input:focus{outline:none;border-color:var(--cyan);}
-  .ecols{display:flex;gap:6px;padding:0 16px 6px;font-family:var(--font-mono);font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;}
-  .ecols span{flex:1;text-align:center;}
-  .ecols span:first-child{max-width:44px;text-align:left;}
-  .efoot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 16px 14px;border-top:1px solid var(--stroke);}
-  .trow{display:flex;align-items:center;gap:8px;}
-  .trow label{font-family:var(--font-mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
-  .trow input{width:110px;}
-
-  .hint{margin-top:12px;font-size:12px;color:var(--faint);font-family:var(--font-mono);letter-spacing:.03em;text-align:center;}
-  .hint b{color:var(--muted);font-weight:600;}
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Sora:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap');
+:root{color-scheme:dark;--bg:#080b17;--bg2:#0d1224;--panel:rgba(18,25,48,.76);--ink:#eaf0ff;--muted:#99a5cf;--faint:#6f7aa6;--stroke:rgba(120,140,210,.22);--cyan:#2ee6c8;--violet:#8b6bff;--pink:#ff5c9a;--gold:#ffcf5c;--focus:#fff;--display:'Chakra Petch',sans-serif;--body:'Sora',sans-serif;--mono:'JetBrains Mono',monospace}
+[data-theme="light"]{color-scheme:light;--bg:#eef1fb;--bg2:#e2e7f6;--panel:rgba(255,255,255,.82);--ink:#182038;--muted:#596487;--faint:#727d9e;--stroke:rgba(60,80,150,.24);--focus:#17213d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--ink);font-family:var(--body);background:radial-gradient(70rem 40rem at 75% -10%,rgba(139,107,255,.16),transparent 60%),radial-gradient(55rem 42rem at 5% 110%,rgba(46,230,200,.1),transparent 55%),linear-gradient(var(--bg2),var(--bg));transition:.2s}button,input{font:inherit}.skip{position:fixed;left:1rem;top:-5rem;z-index:20;background:var(--ink);color:var(--bg);padding:.75rem 1rem;border-radius:.5rem}.skip:focus{top:1rem}.wrap{width:min(1080px,calc(100% - 2rem));margin:auto;padding:1.4rem 0 2rem}header{display:flex;align-items:end;justify-content:space-between;gap:1rem;flex-wrap:wrap}.eyebrow{margin:0 0 .35rem;color:var(--cyan);font:600 .72rem var(--mono);letter-spacing:.24em;text-transform:uppercase}h1{font:700 clamp(1.9rem,5vw,3rem)/1 var(--display);margin:0}h1 span{display:block;margin-top:.6rem;color:var(--muted);font-size:.34em;letter-spacing:.14em;text-transform:uppercase}.stats{display:flex;gap:.6rem;flex-wrap:wrap}.stat{min-width:7rem;padding:.7rem .85rem;border:1px solid var(--stroke);border-radius:.8rem;background:var(--panel);backdrop-filter:blur(8px)}.stat b{display:block;color:var(--faint);font:600 .63rem var(--mono);letter-spacing:.09em;text-transform:uppercase}.stat output{display:block;margin-top:.2rem;font:600 1.2rem var(--display);font-variant-numeric:tabular-nums}.stat.accent output{color:var(--cyan)}.toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.15rem 0 .8rem}.btn{min-height:42px;border:1px solid var(--stroke);border-radius:.65rem;padding:.6rem .8rem;color:var(--ink);background:var(--panel);font:600 .72rem var(--mono);cursor:pointer}.btn:hover{border-color:var(--cyan)}.btn[aria-pressed="true"]{color:var(--cyan);border-color:rgba(46,230,200,.65);background:rgba(46,230,200,.09)}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.stage{position:relative;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--stroke);border-radius:1.1rem;background:linear-gradient(var(--panel),transparent);box-shadow:0 28px 70px -38px #000;touch-action:none}canvas{display:block;width:100%;height:100%;cursor:grab}.tip{position:absolute;z-index:2;opacity:0;pointer-events:none;transform:translate(-50%,-120%);padding:.55rem .7rem;border:1px solid rgba(46,230,200,.5);border-radius:.6rem;background:var(--bg2);font:600 .72rem var(--mono);white-space:nowrap}.tip strong{display:block;color:var(--cyan);font-size:1rem}.legend{position:absolute;left:1rem;bottom:.8rem;display:flex;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.72rem;pointer-events:none}.key{display:inline-flex;align-items:center;gap:.4rem}.sw{width:1.3rem;height:.5rem;border-radius:.2rem;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink))}.sw.old{background:#7892da88}.sw.line{height:0;border-top:2px solid var(--gold)}.editor{margin-top:.8rem;padding:1rem;border:1px solid var(--stroke);border-radius:.85rem;background:var(--panel)}.editor[hidden]{display:none}.editor h2{margin:0 0 .8rem;font:600 1rem var(--display)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem}.field label{display:block;margin-bottom:.25rem;color:var(--muted);font:600 .65rem var(--mono);text-transform:uppercase}.field input{width:100%;padding:.5rem;border:1px solid var(--stroke);border-radius:.45rem;color:var(--ink);background:var(--bg)}.hint{text-align:center;color:var(--faint);font:.7rem var(--mono)}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:650px){.stage{aspect-ratio:1/1}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{width:100%}.stat{flex:1}.toolbar .btn{flex:1 1 9rem}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+.lab{display:grid;grid-template-columns:1.05fr .95fr;gap:.8rem;margin-top:.8rem}.panel{padding:1rem;border:1px solid var(--stroke);border-radius:.9rem;background:var(--panel);backdrop-filter:blur(8px)}.panel h2{margin:0 0 .75rem;font:600 1rem var(--display)}.panel h3{margin:1rem 0 .45rem;font:600 .8rem var(--mono);color:var(--cyan);text-transform:uppercase}.insights{margin:0;padding-left:1.2rem;color:var(--muted);font-size:.84rem}.insights li+li{margin-top:.45rem}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}.controls label{display:grid;gap:.3rem;color:var(--muted);font:600 .65rem var(--mono);text-transform:uppercase}.controls input,.controls select{width:100%;padding:.52rem;border:1px solid var(--stroke);border-radius:.5rem;background:var(--bg);color:var(--ink)}.progress{height:.7rem;overflow:hidden;border-radius:1rem;background:var(--bg);border:1px solid var(--stroke)}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width .3s}.tableWrap{overflow:auto;max-height:27rem}table{width:100%;border-collapse:collapse;font-size:.78rem}th,td{padding:.55rem;text-align:right;border-bottom:1px solid var(--stroke);white-space:nowrap}th:first-child,td:first-child{text-align:left}caption{text-align:left;margin-bottom:.6rem;color:var(--muted)}.actions{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.7rem}.drop{margin-top:.7rem;padding:1rem;border:1px dashed var(--stroke);border-radius:.65rem;text-align:center;color:var(--muted);font-size:.75rem}.drop.over{border-color:var(--cyan);color:var(--cyan)}[data-contrast="high"]{--bg:#000;--bg2:#000;--panel:#000;--ink:#fff;--muted:#fff;--faint:#ddd;--stroke:#fff;--cyan:#00fff0;--gold:#ffe600}.toast{position:fixed;right:1rem;bottom:1rem;z-index:30;max-width:22rem;padding:.8rem 1rem;border:1px solid var(--cyan);border-radius:.65rem;background:var(--bg2);color:var(--ink);opacity:0;transform:translateY(1rem);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}@media(max-width:780px){.lab{grid-template-columns:1fr}}@media(max-width:650px){.controls{grid-template-columns:1fr}}
 </style>
-
-<div class="wrap">
-  <header>
-    <div>
-      <p class="eyebrow">Sales Revenue · FY 2026</p>
-      <h1>Revenue Landscape<span class="sub" id="subtitle">12 luni · $ venituri</span></h1>
-    </div>
-    <div class="stats" id="stats"></div>
-  </header>
-
-  <div class="toolbar">
-    <button class="tbtn active" id="tMetric">Metrică: Venituri</button>
-    <button class="tbtn" id="tCompare"><span class="dot"></span>Comparație '25</button>
-    <button class="tbtn active" id="tTarget"><span class="dot"></span>Target $9k</button>
-    <button class="tbtn active" id="tSpin"><span class="dot"></span>Rotire auto</button>
-    <button class="tbtn" id="tEdit">Editează date</button>
-    <button class="tbtn" id="tExport">Export PNG</button>
-    <button class="tbtn" id="tTheme">Temă: Dark</button>
-    <button class="tbtn" id="tReset">Resetare vedere</button>
-  </div>
-
-  <div class="stage" id="stage">
-    <canvas id="c"></canvas>
-    <div class="legend" id="legend"></div>
-    <div class="tip" id="tip"><div class="m"></div><div class="r"></div><div class="d"></div></div>
-  </div>
-
-  <div class="editor" id="editor" hidden>
-    <div class="ehead"><h2>Editează valorile</h2><button class="tbtn" id="tDataReset">Resetează date</button></div>
-    <div class="ecols"><span>Lună</span><span>2026</span><span>2025</span></div>
-    <div class="egrid" id="egrid"></div>
-    <div class="efoot">
-      <div class="trow"><label for="targetIn">Target $</label><input id="targetIn" type="number" step="100" value="9000"></div>
-      <span class="hint" style="margin:0;text-align:left">Modificările se aplică live pe scenă.</span>
-    </div>
-  </div>
-
-  <p class="hint">Trage pentru rotire &nbsp;·&nbsp; <b>vertical</b> = înclinare &nbsp;·&nbsp; treci peste o coloană pentru detalii</p>
-</div>
-
+</head>
+<body>
+<a class="skip" href="#chart">Sari la grafic</a>
+<main class="wrap">
+ <header><div><p class="eyebrow">Sales Revenue · FY 2026</p><h1>Revenue Landscape<span id="subtitle">12 luni · venituri USD</span></h1></div><section class="stats" id="stats" aria-label="Indicatori principali"></section></header>
+ <nav class="toolbar" aria-label="Comenzi grafic">
+  <button class="btn" id="metric" aria-pressed="true">Metrică: venituri</button><button class="btn" id="compare" aria-pressed="false">Comparație 2025</button><button class="btn" id="target" aria-pressed="true">Target $9k</button><button class="btn" id="spin" aria-pressed="false">Rotire automată</button><button class="btn" id="edit" aria-expanded="false">Editează datele</button><button class="btn" id="export">Export PNG</button><button class="btn" id="lang">EN</button><button class="btn" id="theme">Temă: dark</button><button class="btn" id="contrast" aria-pressed="false">Contrast ridicat</button><button class="btn" id="full">Fullscreen</button><button class="btn" id="reset">Resetează vederea</button>
+ </nav>
+ <section class="stage" id="chart" tabindex="0" role="img" aria-describedby="chartDesc"><canvas id="canvas"></canvas><div class="tip" id="tip"></div><div class="legend" id="legend"></div></section>
+ <p id="chartDesc" class="sr"></p><p class="hint" id="hint">Trage pentru rotire · săgețile schimbă perspectiva · treci peste o coloană pentru detalii</p>
+ <section class="editor" id="editor" hidden><h2 id="editorTitle">Editează valorile 2026</h2><div class="grid" id="fields"></div><div class="actions"><button class="btn" id="undo">Undo</button><button class="btn" id="dataReset">Reset date</button></div></section>
+ <section class="lab" aria-label="Analytics Lab">
+  <article class="panel"><h2>Analytics Lab</h2><div class="controls">
+   <label>Scenariu<select id="scenario"><option value="1">Realist</option><option value="1.15">Optimist +15%</option><option value=".85">Pesimist −15%</option></select></label>
+   <label>What-if (%)<input id="whatif" type="range" min="-40" max="40" value="0"><output id="whatOut">0%</output></label>
+   <label>Target anual<input id="annualTarget" type="number" min="0" step="1000" value="108000"></label>
+   <label>Monedă<select id="currency"><option>USD</option><option>EUR</option><option>RON</option><option>GBP</option></select></label>
+  </div><h3>Progres target</h3><div class="progress" role="progressbar" aria-label="Progres target anual" aria-valuemin="0" aria-valuemax="100"><i id="progressBar"></i></div><p id="progressText" class="hint"></p><h3>Insight-uri automate</h3><ul class="insights" id="insights"></ul>
+  <div class="actions"><button class="btn" data-view="front">Față</button><button class="btn" data-view="iso">Izometric</button><button class="btn" data-view="top">De sus</button></div></article>
+  <article class="panel"><h2>Date și forecast</h2><div class="tableWrap"><table><caption id="tableCaption">Date lunare, comparație și estimare</caption><thead><tr><th>Lună</th><th>2025</th><th>2026</th><th>∆ YoY</th><th>Forecast</th></tr></thead><tbody id="dataBody"></tbody></table></div>
+  <div class="actions"><button class="btn" id="csv">Export CSV</button><button class="btn" id="json">Export JSON</button><button class="btn" id="copy">Copiază sumar</button><label class="btn" for="importFile">Import CSV/JSON</label><input class="sr" id="importFile" type="file" accept=".csv,.json,application/json,text/csv"></div><div class="drop" id="drop">Trage aici un fișier CSV sau JSON</div></article>
+ </section>
+</main><footer class="wrap" style="min-height:auto;padding-top:0"><p class="hint"><a href="case-study.html" style="color:var(--cyan)">Studiu de caz / Case study</a> · <a href="README.md" style="color:var(--cyan)">Documentație</a> · v2.0</p></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
-(function(){
-  const months=['ian','feb','mar','apr','mai','iun','iul','aug','sep','oct','noi','dec'];
-  const DEF26=[5000,6000,7500,8200,9500,10500,11000,10200,9200,8500,7000,6000];
-  const DEF25=[4200,4800,6000,6800,7500,8200,9000,8600,7800,7200,6200,5400];
-  const N=12;
-
-  const state={
-    d26:DEF26.slice(), d25:DEF25.slice(),
-    metric:'revenue', compare:false, target:9000, showTarget:true,
-    spinning:!window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    mode:'dark'
-  };
-  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const THEME={
-    dark:{grid:'rgba(120,150,230,0.10)',back:'rgba(120,150,230,0.16)',label:'rgba(139,151,196,0.9)',
-      labelDim:'rgba(139,151,196,0.6)',ghost:[150,170,235],ghostA:0.30,ghostStroke:'rgba(120,150,230,0.35)',
-      line2:'#6a9bff',stroke:'rgba(6,9,20,0.55)',bg1:'#0d1224',bg2:'#080b17',target:'#ff8a5c'},
-    light:{grid:'rgba(40,60,120,0.10)',back:'rgba(40,60,120,0.20)',label:'rgba(60,72,110,0.95)',
-      labelDim:'rgba(60,72,110,0.6)',ghost:[90,120,200],ghostA:0.26,ghostStroke:'rgba(60,90,170,0.4)',
-      line2:'#3a5bd0',stroke:'rgba(30,40,80,0.35)',bg1:'#eef1fb',bg2:'#dde3f4',target:'#e0703a'}
-  };
-  const th=()=>THEME[state.mode];
-
-  const cv=document.getElementById('c'), ctx=cv.getContext('2d');
-  const stage=document.getElementById('stage'), tip=document.getElementById('tip');
-
-  let W=0,H=0,DPR=1;
-  function resize(){
-    DPR=Math.min(window.devicePixelRatio||1,2);
-    const r=stage.getBoundingClientRect(); W=r.width; H=r.height;
-    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-
-  let yaw=-0.62, pitch=0.62, targetYaw=-0.62, targetPitch=0.62, hover=-1;
-
-  function rot(p){
-    const cy=Math.cos(yaw),sy=Math.sin(yaw);
-    let x=p.x*cy-p.z*sy, z=p.x*sy+p.z*cy, y=p.y;
-    const cp=Math.cos(pitch),sp=Math.sin(pitch);
-    return {x, y:y*cp-z*sp, z:y*sp+z*cp};
-  }
-  function project(p,scale,cx,cyc){const r=rot(p);return {sx:cx+r.x*scale, sy:cyc-r.y*scale, depth:r.z};}
-  const lerp=(a,b,t)=>a+(b-a)*t;
-  function ramp(t){
-    const s=[[46,230,200],[110,120,255],[255,92,154]];
-    t=Math.max(0,Math.min(1,t)); const seg=t*(s.length-1);
-    const i=Math.min(Math.floor(seg),s.length-2), f=seg-i, a=s[i],b=s[i+1];
-    return [Math.round(lerp(a[0],b[0],f)),Math.round(lerp(a[1],b[1],f)),Math.round(lerp(a[2],b[2],f))];
-  }
-  const shade=(rgb,k)=>'rgb('+Math.round(Math.min(255,rgb[0]*k))+','+Math.round(Math.min(255,rgb[1]*k))+','+Math.round(Math.min(255,rgb[2]*k))+')';
-
-  // metric helpers
-  function growth(arr){return arr.map((v,i)=>i?((v-arr[i-1])/arr[i-1]*100):0);}
-  function shownVals(){ // primary + optional compare, in the active metric
-    const p = state.metric==='revenue'? state.d26 : growth(state.d26);
-    const c = state.metric==='revenue'? state.d25 : growth(state.d25);
-    return {p, c};
-  }
-
-  function metricGeom(){
-    const {p,c}=shownVals();
-    const pool = state.compare? p.concat(c) : p;
-    if(state.metric==='revenue'){
-      const mx=Math.max(11000,...pool), mn=Math.min(...pool);
-      const CAP=Math.ceil((mx*1.04)/500)*500;
-      const FLOOR=Math.max(0,Math.floor((mn-1200)/500)*500);
-      const heightScale=2.6, base=0;
-      const hNorm=v=>((v-FLOOR)/(CAP-FLOOR))*heightScale+0.15;
-      const step=Math.round((CAP-FLOOR)/4/500)*500||500;
-      const levels=[]; for(let v=FLOOR+step; v<CAP; v+=step) levels.push(v);
-      return {hNorm,base,levels,fmt:v=>'$'+(v>=1000?(v/1000).toFixed(v%1000?1:0)+'k':v),CAP,FLOOR};
-    }else{
-      const gmax=Math.max(5,...pool.map(Math.abs)); const HALF=1.35;
-      const hNorm=g=>(g/gmax)*HALF, base=0;
-      const gs=Math.round(gmax/2/1)*1||5;
-      const levels=[-gmax,-gs,gs,gmax].map(v=>Math.round(v));
-      return {hNorm,base,levels,fmt:v=>(v>0?'+':'')+v.toFixed(0)+'%',gmax,HALF};
-    }
-  }
-
-  function barColor(i,val){
-    const G=metricGeom();
-    if(state.metric==='revenue'){
-      const frac=(val-G.FLOOR)/(G.CAP-G.FLOOR);
-      return ramp(frac);
-    }else{
-      const t=Math.min(1,Math.abs(val)/G.gmax);
-      return val>=0 ? [Math.round(lerp(60,46,t)),Math.round(lerp(150,224,t)),Math.round(lerp(110,150,t))]
-                    : [Math.round(lerp(200,255,t)),Math.round(lerp(90,70,t)),Math.round(lerp(110,110,t))];
-    }
-  }
-
-  function draw(opts){
-    opts=opts||{};
-    if(opts.bg){ const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,th().bg1); g.addColorStop(1,th().bg2);
-      ctx.fillStyle=g; ctx.fillRect(0,0,W,H); } else ctx.clearRect(0,0,W,H);
-
-    const cx=W*0.5, cyc=H*(state.metric==='revenue'?0.70:0.56), scale=Math.min(W,H)*0.064;
-    const spacing=1.34, x0=-((N-1)*spacing)/2;
-    const G=metricGeom(), T=th();
-    const {p:pv,c:cv2}=shownVals();
-
-    // ground grid
-    ctx.lineWidth=1; ctx.strokeStyle=T.grid;
-    const gDepth=state.compare?1.7:1.2;
-    for(let gx=-1;gx<=N;gx++){const px=x0+gx*spacing;
-      const a=project({x:px,y:0,z:-gDepth},scale,cx,cyc),b=project({x:px,y:0,z:gDepth},scale,cx,cyc);
-      ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();}
-    [-gDepth,0,gDepth].forEach(z=>{const a=project({x:x0-spacing,y:0,z},scale,cx,cyc),b=project({x:x0+(N-1)*spacing+spacing,y:0,z},scale,cx,cyc);
-      ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();});
-
-    // back reference levels
-    ctx.font='600 '+Math.max(9,scale*0.24)+'px JetBrains Mono, monospace'; ctx.textAlign='right';
-    G.levels.forEach(v=>{const y=G.hNorm(v);
-      ctx.strokeStyle=(state.metric==='growth'&&v===0)?T.back:T.grid;
-      const a=project({x:x0-spacing*0.6,y,z:-gDepth},scale,cx,cyc),b=project({x:x0+(N-1)*spacing+spacing*0.6,y,z:-gDepth},scale,cx,cyc);
-      ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();
-      ctx.fillStyle=T.labelDim; ctx.fillText(G.fmt(v), a.sx-6, a.sy+3);});
-
-    // target plane (revenue only)
-    if(state.metric==='revenue' && state.showTarget){
-      const y=G.hNorm(state.target);
-      ctx.save(); ctx.setLineDash([6,5]); ctx.lineWidth=1.6; ctx.strokeStyle=T.target;
-      const a=project({x:x0-spacing*0.5,y,z:gDepth},scale,cx,cyc),b=project({x:x0+(N-1)*spacing+spacing*0.5,y,z:gDepth},scale,cx,cyc);
-      ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();
-      ctx.setLineDash([]); ctx.textAlign='left'; ctx.fillStyle=T.target;
-      ctx.fillText('target '+G.fmt(state.target), b.sx+4, b.sy+3); ctx.restore();
-    }
-
-    // build bar list (primary + optional ghost)
-    const zc = state.compare?0.5:0;
-    const bars=[];
-    for(let i=0;i<N;i++){
-      bars.push({i,bx:x0+i*spacing,h:G.hNorm(pv[i]),val:pv[i],zc,hw:0.44,hd:0.44,ghost:false});
-      if(state.compare) bars.push({i,bx:x0+i*spacing,h:G.hNorm(cv2[i]),val:cv2[i],zc:-0.55,hw:0.30,hd:0.30,ghost:true});
-    }
-    // depth sort by centroid
-    bars.forEach(b=>{const cpt=project({x:b.bx,y:0,z:b.zc},scale,cx,cyc); b.depth=cpt.depth;});
-    bars.sort((a,b)=>a.depth-b.depth);
-
-    const topPts=new Array(N); // primary value-cap points for line/hit
-    bars.forEach(bar=>{
-      const {i,bx,h,zc,hw,hd,ghost,val}=bar;
-      const ylo=Math.min(0,h), yhi=Math.max(0,h);
-      const corners=[
-        {x:bx-hw,y:ylo,z:zc-hd},{x:bx+hw,y:ylo,z:zc-hd},{x:bx+hw,y:ylo,z:zc+hd},{x:bx-hw,y:ylo,z:zc+hd},
-        {x:bx-hw,y:yhi,z:zc-hd},{x:bx+hw,y:yhi,z:zc-hd},{x:bx+hw,y:yhi,z:zc+hd},{x:bx-hw,y:yhi,z:zc+hd}
-      ].map(p=>project(p,scale,cx,cyc));
-      if(!ghost) topPts[i]=project({x:bx,y:h,z:zc},scale,cx,cyc);
-
-      const rgb = ghost? T.ghost : barColor(i,val);
-      const isHover=!ghost&&i===hover;
-      const faces=[
-        {idx:[4,5,6,7],k:1.18,top:true},{idx:[3,2,6,7],k:0.82},{idx:[0,1,5,4],k:0.62},
-        {idx:[1,2,6,5],k:0.95},{idx:[0,3,7,4],k:0.72}
-      ].map(f=>{let d=0;f.idx.forEach(ci=>d+=corners[ci].depth);return {...f,d:d/4};}).sort((a,b)=>a.d-b.d);
-
-      faces.forEach(f=>{
-        const p=f.idx.map(ci=>corners[ci]);
-        const area=(p[1].sx-p[0].sx)*(p[2].sy-p[0].sy)-(p[2].sx-p[0].sx)*(p[1].sy-p[0].sy);
-        if(area>-0.5 && !f.top) return;
-        ctx.beginPath();ctx.moveTo(p[0].sx,p[0].sy);for(let k=1;k<p.length;k++)ctx.lineTo(p[k].sx,p[k].sy);ctx.closePath();
-        ctx.globalAlpha=ghost?T.ghostA:1;
-        ctx.fillStyle=shade(rgb, f.k*(isHover?1.22:1)); ctx.fill();
-        ctx.globalAlpha=1;
-        ctx.lineWidth=1; ctx.strokeStyle=ghost?T.ghostStroke:T.stroke; ctx.stroke();
-      });
-      if(isHover){const t=topPts[i]; ctx.save();ctx.beginPath();ctx.arc(t.sx,t.sy,5,0,Math.PI*2);
-        ctx.fillStyle='#fff';ctx.shadowColor='#2ee6c8';ctx.shadowBlur=16;ctx.fill();ctx.restore();}
-    });
-
-    // month labels
-    ctx.textAlign='center'; ctx.font='600 '+Math.max(9,scale*0.23)+'px JetBrains Mono, monospace';
-    for(let i=0;i<N;i++){const lp=project({x:x0+i*spacing,y:0,z:zc+0.55},scale,cx,cyc);
-      ctx.fillStyle=(i===hover)?'#2ee6c8':T.label; ctx.fillText(months[i],lp.sx,lp.sy+2);}
-
-    // trajectory lines
-    function polyline(vals,z,color,glow,nodes){
-      const pts=vals.map((v,i)=>project({x:x0+i*spacing,y:G.hNorm(v)+ (state.metric==='revenue'?0.22:0.10),z},scale,cx,cyc));
-      ctx.save();ctx.lineJoin='round';ctx.lineCap='round';
-      if(glow){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.sx,p.sy):ctx.moveTo(p.sx,p.sy));
-        ctx.lineWidth=6;ctx.strokeStyle=color+'22';ctx.stroke();}
-      ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.sx,p.sy):ctx.moveTo(p.sx,p.sy));
-      ctx.lineWidth=glow?2.4:1.8;ctx.strokeStyle=color;
-      if(glow){ctx.shadowColor=color;ctx.shadowBlur=12;} ctx.stroke();ctx.shadowBlur=0;
-      if(nodes) pts.forEach((p,i)=>{ctx.beginPath();ctx.arc(p.sx,p.sy,i===hover?4.5:3,0,Math.PI*2);
-        ctx.fillStyle=i===hover?'#fff':color;ctx.fill();});
-      ctx.restore(); return pts;
-    }
-    if(state.compare) polyline(cv2,-0.55,T.line2,false,true);
-    polyline(pv,zc,'#ffcf5c',true,true);
-
-    draw._tops=topPts; draw._pv=pv; draw._cv=cv2;
-  }
-
-  // hit test
-  function hit(mx,my){const t=draw._tops;if(!t)return -1;let best=-1,bd=44*44;
-    for(let i=0;i<t.length;i++){if(!t[i])continue;const dx=t[i].sx-mx,dy=t[i].sy-my,d=dx*dx+dy*dy;if(d<bd){bd=d;best=i;}}return best;}
-  function showTip(i,mx,my){
-    if(i<0){tip.style.opacity=0;return;}
-    const rev=state.d26[i];
-    if(state.metric==='revenue'){
-      tip.querySelector('.m').textContent=months[i]+' 2026';
-      tip.querySelector('.r').textContent='$'+rev.toLocaleString('en-US');
-      const dp=i>0?((rev-state.d26[i-1])/state.d26[i-1]*100):0;
-      tip.querySelector('.d').textContent=i>0?((dp>=0?'▲ +':'▼ ')+dp.toFixed(1)+'% vs '+months[i-1]):'început de an';
-    }else{
-      const g=draw._pv[i];
-      tip.querySelector('.m').textContent=months[i]+' · creștere';
-      tip.querySelector('.r').textContent=(g>0?'+':'')+g.toFixed(1)+'%';
-      tip.querySelector('.d').textContent='venit $'+rev.toLocaleString('en-US');
-    }
-    tip.style.left=mx+'px';tip.style.top=my+'px';tip.style.opacity=1;
-  }
-
-  // interaction
-  let dragging=false,lx=0,ly=0;
-  function pos(e){const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top};}
-  function down(e){dragging=true;const p=pos(e);lx=p.x;ly=p.y;setSpin(false);}
-  function move(e){const p=pos(e);
-    if(dragging){const dx=p.x-lx,dy=p.y-ly;lx=p.x;ly=p.y;targetYaw+=dx*0.011;targetPitch=Math.max(0.16,Math.min(1.15,targetPitch+dy*0.006));}
-    else{const i=hit(p.x,p.y);hover=i;showTip(i,p.x,p.y);}}
-  function up(){dragging=false;}
-  cv.addEventListener('mousedown',down);window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
-  cv.addEventListener('mouseleave',()=>{if(!dragging){hover=-1;tip.style.opacity=0;}});
-  cv.addEventListener('touchstart',down,{passive:true});
-  cv.addEventListener('touchmove',e=>{move(e);e.preventDefault();},{passive:false});
-  cv.addEventListener('touchend',()=>{up();hover=-1;tip.style.opacity=0;});
-
-  // UI wiring
-  const $=id=>document.getElementById(id);
-  function setSpin(v){state.spinning=v;$('tSpin').classList.toggle('active',v);$('tSpin').querySelector('.dot');}
-  function updateStats(){
-    const s=$('stats'); const d=state.d26;
-    if(state.metric==='revenue'){
-      const total=d.reduce((a,b)=>a+b,0), peak=Math.max(...d), pi=d.indexOf(peak), avg=total/N;
-      s.innerHTML=
-        '<div class="stat"><div class="k">Total an</div><div class="v">$'+(total/1000).toFixed(1)+'<small>k</small></div></div>'+
-        '<div class="stat accent"><div class="k">Vârf · '+months[pi]+'</div><div class="v">$'+(peak/1000).toFixed(1)+'<small>k</small></div></div>'+
-        '<div class="stat"><div class="k">Medie / lună</div><div class="v">$'+(avg/1000).toFixed(1)+'<small>k</small></div></div>';
-    }else{
-      const g=growth(d), gi=g.slice(1), avg=gi.reduce((a,b)=>a+b,0)/gi.length;
-      const best=Math.max(...gi), bi=g.indexOf(best), worst=Math.min(...gi), wi=g.indexOf(worst);
-      s.innerHTML=
-        '<div class="stat accent"><div class="k">Creștere medie</div><div class="v">'+(avg>=0?'+':'')+avg.toFixed(1)+'<small>%</small></div></div>'+
-        '<div class="stat"><div class="k">Top · '+months[bi]+'</div><div class="v">+'+best.toFixed(1)+'<small>%</small></div></div>'+
-        '<div class="stat"><div class="k">Slab · '+months[wi]+'</div><div class="v">'+worst.toFixed(1)+'<small>%</small></div></div>';
-    }
-  }
-  function updateLegend(){
-    const l=$('legend'); let h='';
-    h+='<span class="item"><span class="swatch bar"></span>'+(state.metric==='revenue'?'Venit 2026':'Creștere 2026')+'</span>';
-    if(state.compare) h+='<span class="item"><span class="swatch ghost"></span>2025</span>';
-    h+='<span class="item"><span class="swatch line"></span>Traiectorie</span>';
-    l.innerHTML=h;
-  }
-  function refresh(){updateStats();updateLegend();
-    $('subtitle').textContent = state.metric==='revenue'?'12 luni · $ venituri':'12 luni · % lună-la-lună';
-    $('tTarget').toggleAttribute('disabled', state.metric!=='revenue');}
-
-  $('tMetric').addEventListener('click',()=>{
-    state.metric=state.metric==='revenue'?'growth':'revenue';
-    $('tMetric').textContent='Metrică: '+(state.metric==='revenue'?'Venituri':'Creștere %');
-    $('tMetric').classList.toggle('active',state.metric==='revenue');
-    refresh();});
-  $('tCompare').addEventListener('click',()=>{state.compare=!state.compare;$('tCompare').classList.toggle('active',state.compare);refresh();});
-  $('tTarget').addEventListener('click',()=>{state.showTarget=!state.showTarget;$('tTarget').classList.toggle('active',state.showTarget);});
-  $('tSpin').addEventListener('click',()=>setSpin(!state.spinning));
-  $('tTheme').addEventListener('click',()=>{state.mode=state.mode==='dark'?'light':'dark';
-    document.body.setAttribute('data-mode',state.mode);$('tTheme').textContent='Temă: '+(state.mode==='dark'?'Dark':'Light');});
-  $('tReset').addEventListener('click',()=>{targetYaw=-0.62;targetPitch=0.62;setSpin(!reduce);});
-  $('tEdit').addEventListener('click',()=>{const e=$('editor');e.hidden=!e.hidden;$('tEdit').classList.toggle('active',!e.hidden);
-    if(!e.hidden)e.scrollIntoView({behavior:'smooth',block:'nearest'});});
-  $('tExport').addEventListener('click',()=>{
-    const wasHover=hover; hover=-1; draw({bg:true});
-    cv.toBlob(async function(blob){
-      hover=wasHover; if(!blob)return;
-      // Inside a Claude artifact: use the downloads capability (a plain link is inert there).
-      let dl=null; try{ if(window.claude&&window.claude.use) dl=await window.claude.use('downloads'); }catch(e){}
-      if(dl){ try{ await dl.save({filename:'revenue-landscape.png',data:blob}); }catch(e){} return; }
-      // Standalone (GitHub Pages / local file): ordinary download.
-      const a=document.createElement('a'); a.download='revenue-landscape.png';
-      a.href=URL.createObjectURL(blob); document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(()=>URL.revokeObjectURL(a.href),1500);
-    },'image/png');
-  });
-
-  // build editor
-  (function buildEditor(){
-    const g=$('egrid');
-    for(let i=0;i<N;i++){
-      const row=document.createElement('div');row.className='erow';
-      row.innerHTML='<span class="lbl">'+months[i]+'</span>'+
-        '<input type="number" step="100" id="in26_'+i+'" value="'+state.d26[i]+'">'+
-        '<input type="number" step="100" id="in25_'+i+'" value="'+state.d25[i]+'">';
-      g.appendChild(row);
-    }
-    g.addEventListener('input',e=>{
-      const id=e.target.id; if(!id)return;
-      const m=id.match(/^in(26|25)_(\d+)$/); if(!m)return;
-      const v=Math.max(0,parseFloat(e.target.value)||0);
-      if(m[1]==='26')state.d26[+m[2]]=v; else state.d25[+m[2]]=v; refresh();
-    });
-    $('targetIn').addEventListener('input',e=>{state.target=Math.max(0,parseFloat(e.target.value)||0);});
-    $('tDataReset').addEventListener('click',()=>{state.d26=DEF26.slice();state.d25=DEF25.slice();state.target=9000;
-      for(let i=0;i<N;i++){$('in26_'+i).value=state.d26[i];$('in25_'+i).value=state.d25[i];}$('targetIn').value=9000;refresh();});
-  })();
-
-  function loop(){if(state.spinning)targetYaw+=0.0032;yaw+=(targetYaw-yaw)*0.12;pitch+=(targetPitch-pitch)*0.12;draw();requestAnimationFrame(loop);}
-  new ResizeObserver(resize).observe(stage);
-  resize();refresh();setSpin(state.spinning);requestAnimationFrame(loop);
+(()=>{'use strict';
+const M={ro:['ian','feb','mar','apr','mai','iun','iul','aug','sep','oct','noi','dec'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
+const base26=[5000,6000,7500,8200,9500,10500,11000,10200,9200,8500,7000,6000], base25=[4200,4800,6000,6800,7500,8200,9000,8600,7800,7200,6200,5400];
+const saved=(()=>{try{return JSON.parse(localStorage.getItem('revenue-landscape-v2'))}catch{return null}})();
+const S={data:saved?.data||[...base26],old:saved?.old||[...base25],lang:saved?.lang||'ro',compare:false,target:true,growth:false,spin:false,theme:saved?.theme||'dark',yaw:-.62,pitch:.62,currency:saved?.currency||'USD',annualTarget:saved?.annualTarget||108000,whatif:0,scenario:1,history:[]};
+const q=x=>document.getElementById(x), canvas=q('canvas'),ctx=canvas.getContext('2d'),stage=q('chart'),tip=q('tip');let W,H,dpr=1,hover=-1,drag=false,lx=0,ly=0,points=[];
+const T={ro:{metric:'Metrică: ',revenue:'venituri',growth:'creștere %',compare:'Comparație 2025',target:'Target $9k',spin:'Rotire automată',edit:'Editează datele',exp:'Export PNG',theme:'Temă: ',reset:'Resetează vederea',total:'Total anual',peak:'Vârf',avg:'Medie / lună',subR:'12 luni · venituri USD',subG:'12 luni · variație lunară',hint:'Trage pentru rotire · săgețile schimbă perspectiva · treci peste o coloană pentru detalii',editTitle:'Editează valorile 2026',traj:'Traiectorie',rev:'Venit 2026'},en:{metric:'Metric: ',revenue:'revenue',growth:'growth %',compare:'Compare 2025',target:'Target $9k',spin:'Auto rotate',edit:'Edit data',exp:'Export PNG',theme:'Theme: ',reset:'Reset view',total:'Annual total',peak:'Peak',avg:'Monthly average',subR:'12 months · USD revenue',subG:'12 months · monthly change',hint:'Drag to rotate · arrow keys change view · hover a column for details',editTitle:'Edit 2026 values',traj:'Trajectory',rev:'Revenue 2026'}};
+function resize(){const r=stage.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+function rot(x,y,z){const cy=Math.cos(S.yaw),sy=Math.sin(S.yaw),a=x*cy-z*sy,b=x*sy+z*cy,cp=Math.cos(S.pitch),sp=Math.sin(S.pitch);return{x:a,y:y*cp-b*sp,z:y*sp+b*cp}}
+function proj(x,y,z,sc,cx,cy){const p=rot(x,y,z);return{x:cx+p.x*sc,y:cy-p.y*sc,z:p.z}}
+function growth(a){return a.map((v,i)=>i?(v-a[i-1])*100/a[i-1]:0)}
+function face(ps,fill){ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);ps.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle='rgba(5,8,20,.4)';ctx.stroke()}
+function draw(bg=false){ctx.clearRect(0,0,W,H);if(bg){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,S.theme==='dark'?'#0d1224':'#eef1fb');g.addColorStop(1,S.theme==='dark'?'#080b17':'#e2e7f6');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}const sc=Math.min(W,H)*.064,cx=W*.5,cy=H*.72,x0=-7.37,vals=S.growth?growth(S.data):S.data,old=S.growth?growth(S.old):S.old,max=S.growth?Math.max(10,...vals.map(Math.abs),...old.map(Math.abs)):12000,hn=v=>S.growth?v/max*1.8:v/max*3.2;
+ctx.strokeStyle=S.theme==='dark'?'rgba(120,150,230,.13)':'rgba(45,65,120,.15)';for(let z=-1.2;z<=1.2;z+=.6){const a=proj(x0-.6,0,z,sc,cx,cy),b=proj(x0+15.5,0,z,sc,cx,cy);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}points=[];
+const bars=[];vals.forEach((v,i)=>{bars.push({i,v,x:x0+i*1.34,z:S.compare?.45:0,ghost:false});if(S.compare)bars.push({i,v:old[i],x:x0+i*1.34,z:-.48,ghost:true})});bars.sort((a,b)=>proj(a.x,0,a.z,sc,cx,cy).z-proj(b.x,0,b.z,sc,cx,cy).z);
+bars.forEach(b=>{const h=hn(b.v),lo=Math.min(0,h),hi=Math.max(0,h),w=b.ghost?.28:.42,d=w,c=[[b.x-w,lo,b.z-d],[b.x+w,lo,b.z-d],[b.x+w,lo,b.z+d],[b.x-w,lo,b.z+d],[b.x-w,hi,b.z-d],[b.x+w,hi,b.z-d],[b.x+w,hi,b.z+d],[b.x-w,hi,b.z+d]].map(p=>proj(...p,sc,cx,cy));let col=b.ghost?'rgba(110,140,215,.38)':`hsl(${172+b.i*7} 78% ${b.i===hover?67:55}%)`;face([c[4],c[5],c[6],c[7]],col);face([c[3],c[2],c[6],c[7]],b.ghost?'rgba(85,110,185,.28)':`hsl(${172+b.i*7} 70% 42%)`);face([c[1],c[2],c[6],c[5]],b.ghost?'rgba(70,95,170,.25)':`hsl(${172+b.i*7} 67% 34%)`);if(!b.ghost)points[b.i]=proj(b.x,h+.16,b.z,sc,cx,cy)});
+ctx.strokeStyle='#ffcf5c';ctx.lineWidth=2.4;ctx.shadowColor='#ffcf5c';ctx.shadowBlur=10;ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();ctx.shadowBlur=0;points.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);ctx.fillStyle='#ffcf5c';ctx.fill()});
+if(S.target&&!S.growth){const y=hn(9000),a=proj(x0-.5,y,1.1,sc,cx,cy),b=proj(x0+15.2,y,1.1,sc,cx,cy);ctx.setLineDash([6,5]);ctx.strokeStyle='#ff7b55';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.setLineDash([])}ctx.font=`600 ${Math.max(9,sc*.23)}px JetBrains Mono`;ctx.textAlign='center';ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--muted');M[S.lang].forEach((m,i)=>{const p=proj(x0+i*1.34,0,1,sc,cx,cy);ctx.fillText(m,p.x,p.y+3)})}
+const symbol=()=>({USD:'$',EUR:'€',RON:'lei ',GBP:'£'}[S.currency]);
+const money=v=>symbol()+Math.round(v).toLocaleString(S.lang==='ro'?'ro-RO':'en-US');
+function persist(){localStorage.setItem('revenue-landscape-v2',JSON.stringify({data:S.data,old:S.old,lang:S.lang,theme:S.theme,currency:S.currency,annualTarget:S.annualTarget}))}
+function notify(msg){q('toast').textContent=msg;q('toast').classList.add('show');clearTimeout(notify.t);notify.t=setTimeout(()=>q('toast').classList.remove('show'),2200)}
+function forecast(){const recent=S.data.slice(-3).reduce((a,b)=>a+b,0)/3,m=S.scenario*(1+S.whatif/100);return S.data.map((_,i)=>Math.round((recent*(1+(i+1)*.008))*m))}
+function analytics(){const vals=S.data,sum=vals.reduce((a,b)=>a+b),fc=forecast(),yoy=sum-S.old.reduce((a,b)=>a+b),above=vals.filter(v=>v>=S.annualTarget/12).length,best=Math.max(...vals),worst=Math.min(...vals),streak=vals.reduce((r,v,i)=>i&&v>vals[i-1]?{n:r.n+1,max:Math.max(r.max,r.n+1)}:{n:0,max:r.max},{n:0,max:0}).max,pct=Math.min(100,sum/S.annualTarget*100);q('progressBar').style.width=pct+'%';q('progressBar').parentElement.setAttribute('aria-valuenow',pct.toFixed(0));q('progressText').textContent=`${pct.toFixed(1)}% · ${money(sum)} / ${money(S.annualTarget)}`;q('insights').innerHTML=[`${yoy>=0?'▲':'▼'} ${Math.abs(yoy/S.old.reduce((a,b)=>a+b)*100).toFixed(1)}% față de 2025.`,`${above} luni au atins targetul lunar.`,`Cea mai lungă serie de creștere: ${streak} luni.`,`Intervalul anual: ${money(worst)} – ${money(best)}.`,`Forecast următoarea lună: ${money(fc[0])}.`].map(x=>`<li>${x}</li>`).join('');q('dataBody').innerHTML=vals.map((v,i)=>`<tr><td>${M[S.lang][i]}</td><td>${money(S.old[i])}</td><td><strong>${money(v)}</strong></td><td>${((v-S.old[i])/S.old[i]*100).toFixed(1)}%</td><td>${money(fc[i])}</td></tr>`).join('')}
+function stats(){const t=T[S.lang],sum=S.data.reduce((a,b)=>a+b),peak=Math.max(...S.data),pi=S.data.indexOf(peak);q('stats').innerHTML=`<div class="stat"><b>${t.total}</b><output>${symbol()}${(sum/1000).toFixed(1)}k</output></div><div class="stat accent"><b>${t.peak} · ${M[S.lang][pi]}</b><output>${symbol()}${(peak/1000).toFixed(1)}k</output></div><div class="stat"><b>${t.avg}</b><output>${symbol()}${(sum/12000).toFixed(1)}k</output></div>`;q('chartDesc').textContent=S.data.map((v,i)=>`${M[S.lang][i]}: ${money(v)}`).join(', ');analytics();persist()}
+function ui(){const t=T[S.lang];q('metric').textContent=t.metric+(S.growth?t.growth:t.revenue);q('compare').textContent=t.compare;q('target').textContent=t.target;q('spin').textContent=t.spin;q('edit').textContent=t.edit;q('export').textContent=t.exp;q('theme').textContent=t.theme+S.theme;q('reset').textContent=t.reset;q('lang').textContent=S.lang==='ro'?'EN':'RO';q('subtitle').textContent=S.growth?t.subG:t.subR;q('hint').textContent=t.hint;q('editorTitle').textContent=t.editTitle;q('legend').innerHTML=`<span class="key"><i class="sw"></i>${t.rev}</span>${S.compare?'<span class="key"><i class="sw old"></i>2025</span>':''}<span class="key"><i class="sw line"></i>${t.traj}</span>`;q('target').disabled=S.growth;q('currency').value=S.currency;q('annualTarget').value=S.annualTarget;stats()}
+function toggle(id,key){q(id).addEventListener('click',()=>{S[key]=!S[key];q(id).setAttribute('aria-pressed',S[key]);ui()})}toggle('compare','compare');toggle('target','target');toggle('spin','spin');q('metric').onclick=()=>{S.growth=!S.growth;q('metric').setAttribute('aria-pressed',!S.growth);ui()};q('lang').onclick=()=>{S.lang=S.lang==='ro'?'en':'ro';document.documentElement.lang=S.lang;ui()};q('theme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';document.body.dataset.theme=S.theme;ui()};q('reset').onclick=()=>{S.yaw=-.62;S.pitch=.62};q('edit').onclick=()=>{q('editor').hidden=!q('editor').hidden;q('edit').setAttribute('aria-expanded',!q('editor').hidden)};q('export').onclick=()=>{draw(true);const a=document.createElement('a');a.download='revenue-landscape.png';a.href=canvas.toDataURL('image/png');a.click()};
+M.ro.forEach((m,i)=>{const d=document.createElement('div');d.className='field';d.innerHTML=`<label for="v${i}">${m}</label><input id="v${i}" type="number" min="0" step="100" value="${S.data[i]}">`;q('fields').append(d);d.querySelector('input').onfocus=()=>S.history.push([...S.data]);d.querySelector('input').oninput=e=>{S.data[i]=Math.max(0,+e.target.value||0);stats()}});
+function p(e){const r=canvas.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top}}canvas.onpointerdown=e=>{drag=true;canvas.setPointerCapture(e.pointerId);({x:lx,y:ly}=p(e));S.spin=false;q('spin').setAttribute('aria-pressed','false')};canvas.onpointermove=e=>{const a=p(e);if(drag){S.yaw+=(a.x-lx)*.011;S.pitch=Math.max(.18,Math.min(1.12,S.pitch+(a.y-ly)*.006));lx=a.x;ly=a.y}else{let best=-1,dist=900;points.forEach((v,i)=>{const d=(v.x-a.x)**2+(v.y-a.y)**2;if(d<dist){dist=d;best=i}});hover=best;if(best<0)tip.style.opacity=0;else{tip.innerHTML=`${M[S.lang][best]} 2026<strong>${money(S.data[best])}</strong>`;tip.style.left=a.x+'px';tip.style.top=a.y+'px';tip.style.opacity=1}}};canvas.onpointerup=()=>drag=false;stage.onkeydown=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();S.yaw+=(e.key==='ArrowRight'?.08:e.key==='ArrowLeft'?-.08:0);S.pitch=Math.max(.18,Math.min(1.12,S.pitch+(e.key==='ArrowDown'?.06:e.key==='ArrowUp'?-.06:0)))}};
+q('contrast').onclick=()=>{const on=document.body.dataset.contrast!=='high';document.body.dataset.contrast=on?'high':'';q('contrast').setAttribute('aria-pressed',on)};q('full').onclick=()=>document.fullscreenElement?document.exitFullscreen():stage.requestFullscreen?.();q('scenario').onchange=e=>{S.scenario=+e.target.value;analytics()};q('whatif').oninput=e=>{S.whatif=+e.target.value;q('whatOut').textContent=(S.whatif>0?'+':'')+S.whatif+'%';analytics()};q('annualTarget').onchange=e=>{S.annualTarget=Math.max(1,+e.target.value||108000);stats()};q('currency').onchange=e=>{S.currency=e.target.value;stats()};
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{const v=b.dataset.view;[S.yaw,S.pitch]=v==='front'?[0,.42]:v==='top'?[-.3,1.12]:[-.62,.62]});q('undo').onclick=()=>{const h=S.history.pop();if(!h)return notify('Nu există modificări de anulat.');S.data=h;S.data.forEach((v,i)=>q('v'+i).value=v);stats();notify('Ultima modificare a fost anulată.')};q('dataReset').onclick=()=>{S.history.push([...S.data]);S.data=[...base26];S.data.forEach((v,i)=>q('v'+i).value=v);stats();notify('Datele au fost resetate.')};
+function download(name,type,text){const a=document.createElement('a');a.download=name;a.href=URL.createObjectURL(new Blob([text],{type}));a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}q('csv').onclick=()=>download('revenue-landscape.csv','text/csv',`month,2025,2026\n${M.en.map((m,i)=>`${m},${S.old[i]},${S.data[i]}`).join('\n')}`);q('json').onclick=()=>download('revenue-landscape.json','application/json',JSON.stringify({title:'Revenue Landscape',currency:S.currency,target:S.annualTarget,months:M.en,revenue2025:S.old,revenue2026:S.data,forecast:forecast()},null,2));q('copy').onclick=async()=>{const sum=S.data.reduce((a,b)=>a+b),peak=Math.max(...S.data);await navigator.clipboard.writeText(`Revenue Landscape · ${money(sum)} total · peak ${money(peak)} · target ${(sum/S.annualTarget*100).toFixed(1)}%`);notify('Sumarul a fost copiat.')};
+async function importData(file){try{const text=await file.text();let next,old;if(file.name.toLowerCase().endsWith('.json')){const j=JSON.parse(text);next=j.revenue2026||j.data;old=j.revenue2025}else{const rows=text.trim().split(/\r?\n/).slice(1).map(r=>r.split(','));old=rows.map(r=>+r[1]);next=rows.map(r=>+r[2])}if(!Array.isArray(next)||next.length!==12||next.some(v=>!Number.isFinite(+v)))throw Error();S.history.push([...S.data]);S.data=next.map(Number);if(Array.isArray(old)&&old.length===12)S.old=old.map(Number);S.data.forEach((v,i)=>q('v'+i).value=v);stats();notify('Datele au fost importate.')}catch{notify('Fișier invalid. Sunt necesare 12 valori lunare.')}}q('importFile').onchange=e=>e.target.files[0]&&importData(e.target.files[0]);['dragenter','dragover'].forEach(x=>q('drop').addEventListener(x,e=>{e.preventDefault();q('drop').classList.add('over')}));['dragleave','drop'].forEach(x=>q('drop').addEventListener(x,e=>{e.preventDefault();q('drop').classList.remove('over')}));q('drop').addEventListener('drop',e=>e.dataTransfer.files[0]&&importData(e.dataTransfer.files[0]));
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;S.spin=!reduce;q('spin').setAttribute('aria-pressed',S.spin);new ResizeObserver(resize).observe(stage);let visible=true;new IntersectionObserver(([e])=>visible=e.isIntersecting).observe(stage);document.addEventListener('visibilitychange',()=>visible=!document.hidden);function loop(){if(visible){if(S.spin)S.yaw+=.0028;draw()}requestAnimationFrame(loop)}resize();ui();loop();if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
 </script>
+</body>
+</html>
