@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1 — 2026-11-23
+
+- Fonturi găzduite local (Chakra Petch, Sora, JetBrains Mono) în loc de Google Fonts: fără @import care blochează randarea, fără cereri către terți (GDPR).
+- Subseturi românești mici (ĂăȘșȚț) separate de latin-ext; `font-display: optional` + preload Sora.
+- Pornirea canvas-ului amânată după primul frame, ca FCP să nu aștepte desenarea.
+- Cache service worker reîmprospătat.
+
 ## 2.0.0 — 2026-09-23
 
 - Analytics Lab with forecast and What-if scenarios.
